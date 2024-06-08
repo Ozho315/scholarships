@@ -29,8 +29,10 @@ Para trabajar en español, lo ideal es usar un paquete que me permita manejar id
 
 Instalamos el paquete (ya en la carpeta del proyecto)
 
+https://laravel-lang.com/introduction.html
+
 ```bash
-composer require laravel-lang/common --dev
+composer require --dev laravel-lang/common
 
 php artisan lang:add es 
 
