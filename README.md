@@ -120,3 +120,5 @@ el parámetro `-m` indica que debemos crear la migración junto al modelo, para 
 php artisan make:model --help
 ```
 
+## Seeder
+Antes de empezar a crear modelos podemos crear el administrador porque a la final será el usuario que sí o sí existirá desde el principio del sistema, este lo podemos crear desde un Seeder que creará, el rol de administrador y un usuario administrador
