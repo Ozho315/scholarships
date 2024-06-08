@@ -7,60 +7,119 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+## Base
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Inicié instalando laravel de manera global 
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+```bash
+composer global require laravel/installer
+```
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Ya con Laravel global puedo iniciar la app desde el comando general
 
-## Learning Laravel
+Mi app se llamará Scholarships
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+```bash
+laravel new scholarships
+```
+---
+Voy llenando y respondiendo todas las preguntas que me hace el comando, iniciando con breeze, iniciando un repo de git para llevar control de los cambios, usando MySQL, usando Pest, etc.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Con breeze instalado voy a tener ya la capacidad de iniciar sesión, pero el contenido de la web va a estar en inglés, así que debo instalar un paquete que me permita manejar un multi-language 
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-## Laravel Sponsors
+## Laravel Lang
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Para trabajar en español, lo ideal es usar un paquete que me permita manejar idiomas, en este caso `Laravel Lang`
 
-### Premium Partners
+Instalamos el paquete (ya en la carpeta del proyecto)
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+```bash
+composer require laravel-lang/common --dev
 
-## Contributing
+php artisan lang:add es 
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+php artisan lang:update
+```
 
-## Code of Conduct
+Y en el .env coloco el español en el APP_LOCALE
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```env
+APP_LOCALE=es
+```
 
-## Security Vulnerabilities
+Ya con eso el sistema buscará el archivo de idioma español para el sistema, y siempre que queramos colocar texto debemos usar constantes de texto, es decir:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+En lugar de poner
+```php
+<h1>Este es el título</h1>
+```
 
-## License
+Usamos 
+```php
+<h1>__('This is the title')</h1>
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Y en el archivo de idioma español (un archivo JSON) colocamos el significado
+
+```json
+{
+    "This is the title": "Este es el título"
+}
+```
+Puede parecer complicado pero a la larga permite manejarse mejor si quiero tener un sistema con más idiomas
+
+## Dark mode
+
+Para implementar el modo oscuro con un switcher se puede seguir este tutorial
+https://rappasoft.com/blog/enabling-dark-mode-on-laravel-boilerplate-pro
+
+Para utilizar también el modo del sistema se usa la segunda parte
+https://rappasoft.com/blog/extending-tailwind-css-dark-mode-to-use-system-preference
+
+## Levantar el proyecto
+Ya una vez se haya realizado lo de arriba se puede levantar el proyecto sin problema, abriendo una terminal con 3 paneles y ejecutando en el primer panel 
+```bash
+php artisan serve
+```
+en el segundo panel
+
+```bash
+npm run dev
+```
+
+y el tercer panel para ejecutar comandos
+
+## Roles y permisos
+Para gestionar roles y permisos vamos a usar Laravel Permission de Spatie
+
+### Instalar Laravel Permission
+
+Aplicando los pasos de la (página oficial)[https://spatie.be/docs/laravel-permission/v6/introduction]
+
+```bash
+composer require spatie/laravel-permission
+
+php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
+
+php artisan config:clear
+
+php artisan migrate
+```
+Ya con eso tenemos login, auth, recuperación de claves, verificación de correo, multi-idioma, roles y permisos en prácticamente nada
+
+# El proyecto de becas
+
+Ahora sí toca empezar con el desarrollo del sistema como tal, teniendo una base de sistema. Lo primero sería crear los modelos y migraciones (podemos incluir también los controladores pero lo haremos después)
+
+Para crear un modelo junto a su migración ejecutamos el comando 
+
+```bash
+php artisan make:model Member -m 
+```
+el parámetro `-m` indica que debemos crear la migración junto al modelo, para saber todas las opciones podemos ejecutar
+
+```bash
+php artisan make:model --help
+```
+
